@@ -2,7 +2,6 @@ import React, { useState , useEffect } from 'react'
 import { motion } from 'framer-motion';
 import {AppWrap} from '../../wrapper';
 import './About.scss';
-import { images } from '../../constants';
 import { urlFor, client } from '../../client';
 
 const About = () => {
@@ -24,7 +23,7 @@ const About = () => {
 
       <div className="app__profiles">
         {abouts.map((about , index)=>{
-          {console.log(about)}
+          
           return (
             <motion.div
             whileInView={{opacity : 1}}
