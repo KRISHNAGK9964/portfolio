@@ -1,65 +1,81 @@
-import React ,{ useState , useEffect} from 'react';
-import { AiFillEye , AiFillGithub } from 'react-icons/ai';
-import {motion } from 'framer-motion';
+import React, { useState, useEffect } from "react";
+import { AiFillEye, AiFillGithub } from "react-icons/ai";
+import { motion } from "framer-motion";
 
-import { AppWrap , MotionWrap} from '../../wrapper';
-import {urlFor , client} from '../../client';
-import './Work.scss';
+import { AppWrap, MotionWrap } from "../../wrapper";
+import { urlFor, client } from "../../client";
+import "./Work.scss";
 
 const Work = () => {
-  const [activeFilter, setActiveFilter] = useState('All');
-  const [animateCard , setAnimateCard ] = useState({y:0 , opacity:1});
+  const [activeFilter, setActiveFilter] = useState("All");
+  const [animateCard, setAnimateCard] = useState({ y: 0, opacity: 1 });
   const [works, setWorks] = useState([]);
   const [filterWork, setFilterWork] = useState([]);
-
+  const [loaded, setLoaded] = useState(false);
   useEffect(() => {
     const query = '*[_type == "works"]';
 
-    client.fetch(query).then((data)=>{
+    client.fetch(query).then((data) => {
+      setLoaded(true);
       setWorks(data);
       setFilterWork(data);
-    })
-  }, [])
-  
-  
-  const handleWorkFilter = (item)=>{
+    });
+  }, []);
+
+  const handleWorkFilter = (item) => {
     setActiveFilter(item);
-    setAnimateCard([{y:100 , opacity: 0}]);
+    setAnimateCard([{ y: 100, opacity: 0 }]);
 
-    setTimeout(()=>{
-      setAnimateCard([{ y:0 , opacity:1}]);
+    setTimeout(() => {
+      setAnimateCard([{ y: 0, opacity: 1 }]);
 
-      if(item === 'All'){
+      if (item === "All") {
         setFilterWork(works);
-      }else{
-        setFilterWork(works.filter((work) => work.tags.includes(item) ));
+      } else {
+        setFilterWork(works.filter((work) => work.tags.includes(item)));
       }
-      
-    },500);
+    }, 500);
   };
   return (
     <>
-      <h2 className="head-text">My Creative <span>Portfolio</span> Section</h2>
+      <h2 className="head-text">
+        My Creative <span>Portfolio</span> Section
+      </h2>
 
       <div className="app__work-filter">
-        {['LandingPage' , "Web App" , 'Node JS' , "React JS" , "All"].map((item , index)=>(
-          <div
-            key={index}
-            onClick={() => handleWorkFilter(item)}
-            className={`app__work-filter-item app__flex p-text ${activeFilter === item ? 'item-active' : ''}`}
-          >
-            {item}
-          </div>
-        ))}
+        {["LandingPage", "Web App", "Node JS", "React JS", "All"].map(
+          (item, index) => (
+            <div
+              key={index}
+              onClick={() => handleWorkFilter(item)}
+              className={`app__work-filter-item app__flex p-text ${
+                activeFilter === item ? "item-active" : ""
+              }`}
+            >
+              {item}
+            </div>
+          )
+        )}
       </div>
 
       <motion.div
         animate={animateCard}
-        transition={{ duration: 0.5, delayChildren: 0.5}}
+        transition={{ duration: 0.5, delayChildren: 0.5 }}
         className="app__work-portfolio"
       >
-
-        {filterWork.map((work , index)=>(
+        { loaded == false ? (
+          <div className="app__work-item app__flex ">
+            <div className="app__work-img app__flex skeleton skeleton-img"></div>
+            <div className="app__work-content app__flex ">
+              <h4 className="bold-text skeleton skeleton-h4"></h4>
+              <p
+                className="p-text skeleton skeleton-text"
+                style={{ marginTop: 10 }}
+              ></p>
+            </div>
+          </div>
+        ) :
+          filterWork.map((work , index)=>(
           <div className="app__work-item app__flex" key={index}>
             <div className="app__work-img app__flex">
               <img src={urlFor(work.imgUrl)} alt={work.name} />
@@ -103,10 +119,15 @@ const Work = () => {
               </div>
             </div>
           </div>
-        ))}
+        ))} 
+        
       </motion.div>
     </>
-  )
-}
+  );
+};
 
-export default AppWrap(MotionWrap(Work, 'app__works'),"work","app__primarybg");
+export default AppWrap(
+  MotionWrap(Work, "app__works"),
+  "work",
+  "app__primarybg"
+);

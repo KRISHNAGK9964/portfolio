@@ -152,3 +152,42 @@
         top: -25px;
     }
 }
+
+.skeleton{
+    animation-name: fadeInOut ;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    border-radius: 6px;
+    @keyframes fadeInOut {
+        0%{
+            background: rgb(238, 238, 238);
+            opacity: 0.8;
+        }
+
+        100%{
+            background: rgb(179, 179, 179);
+            opacity: 0.5;
+        }
+    }
+}
+
+.skeleton-img{
+    width: 100%;
+    height: 200px;
+    background: #000;
+    margin-bottom: 15px;
+}
+.skeleton-h4{
+    width: 80%;
+    background: #000;
+    height: 1rem;
+
+}
+
+.skeleton-text{
+    width: 100%;
+    background: #000;
+    height: 1rem;
+    
+}
